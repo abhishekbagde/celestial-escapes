@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <title>Payment</title>
+    <h1>Payment Summary</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Flight Number</th>
+                <th>Price</th>
+                <th>Departure Date</th>
+                <th>Departure Time</th>
+                <th>Arrival Date</th>
+                <th>Arrival Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ flight_schedule.flight_number }}</td>
+                <td>{{ flight_schedule.price }}</td>
+                <td>{{ flight_schedule.departure_date }}</td>
+                <td>{{ flight_schedule.departure_time }}</td>
+                <td>{{ flight_schedule.arrival_date }}</td>
+                <td>{{ flight_schedule.arrival_time }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <form method="post" action="{% url 'process_payment' %}">
+        {% csrf_token %}
+        <!-- Include any additional fields for payment processing -->
+        <button type="submit" class="btn btn-primary">Pay Now</button>
+    </form>
+{% endblock %}

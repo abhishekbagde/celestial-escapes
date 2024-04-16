@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <title>Select Base</title>
+    <h1>Select Base for {{ planet.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="planet_id" value="{{ planet.id }}">
+        <div class="row">
+            {% for base in bases %}
+                <div class="col-md-6">
+                    <div class="mb-4 shadow-sm">
+                        <div class="card-body">
+                            {% for image in base.images.all %}
+                                <img src="{{ image.image.url }}" alt="{{ base.name }} image" class="img-fluid mb-2">
+                            {% endfor %}
+                            <h5 class="card-title text-center">{{ base.name }}</h5>
+                            <p class="card-text">{{ base.description }}</p>
+                            <form method="post" action="{% url 'select_base' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="planet_id" value="{{ planet.id }}">
+                                <input type="hidden" name="base_id" value="{{ base.id }}">
+                                <button type="submit" class="btn btn-primary btn-block">Select Base</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:2 and not forloop.last %}
+                    </div><div class="row">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </form>
+    <style>
+        .sketchfab-embed-wrapper {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+{% endblock %}

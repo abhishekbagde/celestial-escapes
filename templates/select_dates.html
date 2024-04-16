@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <title>Select Dates</title>
+    <h1>Select Dates</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="departure_date">Departure Date:</label>
+            <input type="date" id="departure_date" name="departure_date" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="arrival_date">Arrival Date:</label>
+            <input type="date" id="arrival_date" name="arrival_date" class="form-control">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Proceed</button>
+    </form>
+{% endblock %}

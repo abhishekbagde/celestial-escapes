@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <title>Flight List</title>
+    <style>
+        body, table, th, td {
+          color: white;
+        }
+      </style>
+    <h1>Available Flights</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Flight Number</th>
+                <th>Price</th>
+                <th>Departure Date</th>
+                <th>Departure Time</th>
+                <th>Arrival Date</th>
+                <th>Arrival Time</th>
+                <th></th>  <!-- Empty header for the confirm button -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight.flight_number }}</td>
+                <td>₪{{ flight.price }}</td>
+                <td>{{ flight.departure_date }}</td>
+                <td>{{ flight.departure_time }}</td>
+                <td>{{ flight.arrival_date }}</td>
+                <td>{{ flight.arrival_time }}</td>
+                <td>
+                    <form action="{% url 'payment_page' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="flight_id" value="{{ flight.id }}">
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
