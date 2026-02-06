@@ -27,8 +27,18 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-e4!)n-x5kzjkpv3ep#%hs
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-# ALLOWED_HOSTS configuration
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,*.railway.app,*.up.railway.app', cast=Csv())
+# ALLOWED_HOSTS - Accept everything in dev, specific in production
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'web-production-6505.up.railway.app',  # Your specific Railway domain
+    '.railway.app',  # Any railway subdomain
+    '.up.railway.app',  # Any up.railway subdomain
+]
+
+# In development/debug mode, accept all hosts
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
