@@ -85,6 +85,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'spacetravel.wsgi.application'
 
 
+# CSRF and Security Settings for HTTPS on Railway
+# Trust X-Forwarded-Proto header from Railway proxy
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-6505.up.railway.app',
+    'https://*.railway.app',
+    'https://*.up.railway.app',
+]
+
+# Trust the X-Forwarded-For header from Railway
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# CSRF Cookie settings for HTTPS
+CSRF_COOKIE_SECURE = not DEBUG  # Only secure cookies in production
+CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript access for AJAX (if needed)
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+# Session security
+SESSION_COOKIE_SECURE = not DEBUG  # Only secure cookies in production
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 # Use PostgreSQL in production, SQLite in development
