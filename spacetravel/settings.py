@@ -111,15 +111,21 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 # Use PostgreSQL in production, SQLite in development
 
-if config('DB_ENGINE', default='sqlite3') == 'postgresql':
+# Try to use DATABASE_URL first (Railway sets this automatically)
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'), conn_max_age=600)
+    }
+elif config('DB_ENGINE', default='sqlite3') == 'postgresql':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('DB_NAME', default='railway'),
-            'USER': config('DB_USER', default='postgres'),
-            'PASSWORD': config('DB_PASSWORD', default=''),
-            'HOST': config('DB_HOST', default='localhost'),
-            'PORT': config('DB_PORT', default='5432'),
+            'NAME': config('PGDATABASE', default=config('DB_NAME', default='railway')),
+            'USER': config('PGUSER', default=config('DB_USER', default='postgres')),
+            'PASSWORD': config('POSTGRES_PASSWORD', default=config('DB_PASSWORD', default='')),
+            'HOST': config('PGHOST', default=config('DB_HOST', default='localhost')),
+            'PORT': config('PGPORT', default=config('DB_PORT', default='5432')),
         }
     }
 else:
