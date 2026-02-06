@@ -1,8 +1,310 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <h1>Welcome to Space Travel</h1>
-  <p>Explore the wonders of the universe with our space travel packages.</p>
-  <a href="{% url 'flight_booking' %}">Book Now</a>
-  {# Add your content and sections here #}
+
+<style>
+    /* Hero Section */
+    .hero-section {
+        position: relative;
+        height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 153, 255, 0.05) 100%);
+        border-bottom: 3px solid #00d4ff;
+    }
+
+    .hero-content {
+        z-index: 10;
+        animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 900;
+        background: linear-gradient(90deg, #00d4ff, #0099ff, #00d4ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+        text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+        color: #b0b0ff;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    .float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    /* Planet Cards */
+    .planets-section {
+        padding: 80px 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .planet-card {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 153, 255, 0.05) 100%);
+        border: 2px solid #00d4ff;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .planet-card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .planet-card:hover:before {
+        left: 100%;
+    }
+
+    .planet-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 20px 60px rgba(0, 212, 255, 0.5);
+        border-color: #00ffff;
+    }
+
+    .planet-icon {
+        font-size: 4rem;
+        margin: 20px 0;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .planet-name {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #00d4ff;
+        margin: 20px 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .planet-description {
+        color: #c0c0ff;
+        font-size: 0.95rem;
+        margin: 20px 0;
+        flex-grow: 1;
+    }
+
+    .planet-price {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #00ff88;
+        margin: 20px 0;
+    }
+
+    .planet-button {
+        background: linear-gradient(90deg, #00d4ff, #0099ff);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+    }
+
+    .planet-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+    }
+
+    /* Features Section */
+    .features-section {
+        padding: 80px 20px;
+        background: linear-gradient(135deg, rgba(0, 153, 255, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+        border-top: 3px solid #00d4ff;
+        border-bottom: 3px solid #00d4ff;
+    }
+
+    .feature-box {
+        text-align: center;
+        padding: 40px 20px;
+        margin: 20px;
+        background: rgba(0, 212, 255, 0.05);
+        border: 1px solid #00d4ff;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .feature-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        color: #00d4ff;
+        margin-bottom: 20px;
+    }
+
+    .feature-title {
+        font-size: 1.3rem;
+        color: #00d4ff;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .feature-text {
+        color: #c0c0ff;
+        font-size: 0.95rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon {
+        font-size: 5rem;
+        color: #00d4ff;
+        margin-bottom: 30px;
+        opacity: 0.7;
+    }
+
+    .empty-message {
+        font-size: 1.5rem;
+        color: #b0b0ff;
+        margin-bottom: 20px;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">✨ Celestial Escapes ✨</h1>
+        <p class="hero-subtitle">Journey Beyond the Stars — Explore the Universe Like Never Before</p>
+        <div class="hero-buttons">
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'signup' %}" class="btn btn-cosmic">
+                <i class="fas fa-rocket"></i> Start Your Journey
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-cosmic">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            {% else %}
+            <a href="{% url 'flight_booking' %}" class="btn btn-cosmic">
+                <i class="fas fa-ticket-alt"></i> Book a Flight
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <h2 class="section-title">Why Choose Celestial Escapes?</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon"><i class="fas fa-redo-alt"></i></div>
+                    <h3 class="feature-title">Safe Journeys</h3>
+                    <p class="feature-text">State-of-the-art spacecraft with perfect safety records. Your safety is our priority.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon"><i class="fas fa-star"></i></div>
+                    <h3 class="feature-title">Luxury Experience</h3>
+                    <p class="feature-text">Experience unparalleled comfort and amenities during your cosmic adventure.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <h3 class="feature-title">24/7 Support</h3>
+                    <p class="feature-text">Our mission control team is always ready to assist you throughout your journey.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Planets Section -->
+<section class="planets-section">
+    <h2 class="section-title">Explore Destinations</h2>
+    <div class="container">
+        {% if destinations %}
+            <div class="row">
+                {% for destination in destinations %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="planet-card">
+                        <div class="planet-icon">{{ destination.emoji }}</div>
+                        <h3 class="planet-name">{{ destination.name }}</h3>
+                        <p class="planet-description">{{ destination.description }}</p>
+                        <p class="planet-price">${{ destination.price }} per person</p>
+                        <a href="{% url 'flight_booking' %}" class="planet-button">Book Now</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-planet"></i></div>
+                <p class="empty-message">🌌 Destinations Coming Soon!</p>
+                <p style="color: #909090; font-size: 1rem;">Our planets are being prepared for your arrival. Check back soon for amazing destinations!</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
 {% endblock %}

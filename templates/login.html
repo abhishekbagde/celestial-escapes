@@ -1,16 +1,257 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h1>Login</h1>
-            <form method="POST">
+
+<style>
+    .auth-section {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .auth-container {
+        width: 100%;
+        max-width: 420px;
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .auth-card {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 153, 255, 0.05) 100%);
+        border: 2px solid #00d4ff;
+        border-radius: 20px;
+        padding: 50px 40px;
+        box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-card:before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .auth-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .auth-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        background: linear-gradient(90deg, #00d4ff, #0099ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .auth-subtitle {
+        text-align: center;
+        color: #b0b0ff;
+        margin-bottom: 40px;
+        font-size: 0.95rem;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        display: block;
+        color: #00d4ff;
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+    }
+
+    .form-control {
+        background: rgba(0, 212, 255, 0.05) !important;
+        border: 2px solid #00d4ff !important;
+        border-radius: 10px !important;
+        color: #e0e0ff !important;
+        padding: 12px 15px !important;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #00ffff !important;
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3) !important;
+        background: rgba(0, 212, 255, 0.08) !important;
+    }
+
+    .form-control::placeholder {
+        color: #707090;
+    }
+
+    .auth-button {
+        width: 100%;
+        background: linear-gradient(90deg, #00d4ff, #0099ff);
+        color: white;
+        border: none;
+        padding: 14px;
+        border-radius: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .auth-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+    }
+
+    .auth-button:active {
+        transform: translateY(-1px);
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #b0b0ff;
+    }
+
+    .auth-footer a {
+        color: #00d4ff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .auth-footer a:hover {
+        color: #00ffff;
+        text-shadow: 0 0 10px #00d4ff;
+    }
+
+    .error-message {
+        background: rgba(255, 100, 100, 0.1);
+        border: 1px solid #ff6464;
+        color: #ff9999;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .errorlist li {
+        color: #ff9999;
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+    }
+
+    .icon-header {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+</style>
+
+<section class="auth-section">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="icon-header">🛸</div>
+            <h1 class="auth-title">Launch Your Journey</h1>
+            <p class="auth-subtitle">Welcome back, Space Explorer!</p>
+
+            <form method="POST" novalidate>
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Login</button>
-                <a href="{% url 'signup' %}" class="btn btn-link">Don't have an account? Sign up</a>
+
+                {% if form.non_field_errors %}
+                <div class="error-message">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="{{ form.username.id_for_label }}"
+                        name="{{ form.username.name }}"
+                        placeholder="Enter your username"
+                        required
+                    >
+                    {% if form.username.errors %}
+                    <div class="errorlist">
+                        {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}" class="form-label">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="{{ form.password.id_for_label }}"
+                        name="{{ form.password.name }}"
+                        placeholder="Enter your password"
+                        required
+                    >
+                    {% if form.password.errors %}
+                    <div class="errorlist">
+                        {% for error in form.password.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="auth-button">
+                    <i class="fas fa-rocket"></i> Launch Mission
+                </button>
             </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="{% url 'signup' %}">Create one now</a></p>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
 {% endblock %}
