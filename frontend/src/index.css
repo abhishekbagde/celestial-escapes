@@ -1,0 +1,89 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
+  color: #c0c0ff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Cosmic glow effects */
+.glow {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.glow-sm {
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+/* Starfield background */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+/* Buttons */
+.btn-cosmic {
+  @apply px-6 py-3 rounded-full font-bold uppercase tracking-wider transition-all duration-300;
+  background: linear-gradient(90deg, #00d4ff, #0099ff);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cosmic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+}
+
+.btn-cosmic:active {
+  transform: scale(0.98);
+}
+
+/* Cards */
+.card {
+  @apply p-6 rounded-lg border border-[#00d4ff] bg-gradient-to-br from-[rgba(0,212,255,0.1)] to-[rgba(0,153,255,0.05)];
+}
+
+.card:hover {
+  @apply border-[#00ffff];
+  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+}
