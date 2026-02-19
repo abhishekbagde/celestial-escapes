@@ -56,9 +56,20 @@ export const bookingAPI = {
 };
 
 export const authAPI = {
-  register: (data) => api.post('/users/', data),
-  login: (username, password) => 
-    api.post('/auth-token/', { username, password }),
+  register: async (data) => {
+    const response = await api.post('/users/', data);
+    return {
+      user: response.data,
+      token: response.data.token,
+    };
+  },
+  login: async (email, password) => {
+    const response = await api.post('/auth-token/', { email, password });
+    return {
+      user: response.data.user,
+      token: response.data.token,
+    };
+  },
   getMe: () => api.get('/users/me/'),
 };
 
